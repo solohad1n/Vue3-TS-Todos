@@ -1,31 +1,40 @@
 <template>
   <ul class="todo-list">
-    <li class="todo-item todo-item--done">
-      <div class="todo-item__status">
-        <i class="bi bi-check2"></i>
-      </div>
-      <span class="todo-item__text">Learn the basics of Vue</span>
-      <button class="todo-item__remove-button">
-        <i class="bi bi-trash3"></i>
-      </button>
-    </li>
-    <li class="todo-item">
-      <div class="todo-item__status">
-        <i class="bi bi-check2"></i>
-      </div>
-      <span class="todo-item__text">Learn the basics of Typescript</span>
-      <button class="todo-item__remove-button">
-        <i class="bi bi-trash3"></i>
-      </button>
-    </li>
-    <li class="todo-item">
-      <div class="todo-item__status">
-        <i class="bi bi-check2"></i>
-      </div>
-      <span class="todo-item__text">Subscribe to the channel</span>
-      <button class="todo-item__remove-button">
-        <i class="bi bi-trash3"></i>
-      </button>
-    </li>
+    <AppToloItem
+    v-for="todo in todos"
+    :key="todo.id"
+    :todo="todo"
+    @toggle-togo="toggleTogo"
+    @remove-todo="removeTodo"
+    />
   </ul>
 </template>
+
+<script lang="ts">
+import { defineComponent, PropType } from "vue";
+import AppToloItem from './AppTodoItem.vue'
+import { Todo } from '@/types/Todo'
+
+export default defineComponent({
+  components: {
+    AppToloItem
+  },
+  props: {
+    todos: {
+      type: Array as PropType<Todo[]>
+    }
+  },
+  methods: {
+    toggleTogo(id: number) {
+      this.$emit('toggleTogo', id)
+    },
+    removeTodo(id: number) {
+      this.$emit('removeTodo', id)
+    }
+  },
+  emits: {
+    toggleTogo: (id: number) => Number.isInteger,
+    removeTodo: (id: number) => Number.isInteger
+  }
+})
+</script>
